@@ -4,8 +4,8 @@ import { ObjectId } from "mongodb";
 
 export interface TextRepoInterface {
     create(text: TextInterface): Promise<TextInterface>;
-    update(couponID: string, coupon: TextInterface): Promise<any>;
-    get(couponID: string): Promise<TextInterface | null>;
+    update(textID: string, text: TextInterface): Promise<any>;
+    get(textID: string): Promise<TextInterface | null>;
     count(predicate: object): Promise<number>;
 }
 
@@ -19,12 +19,12 @@ export class TextRepo implements TextRepoInterface {
         return this.db.create(this.collection, text);
     }
 
-    public async update(couponID: string, coupon: TextInterface): Promise<any> {
-        return this.db.update(this.collection, { _id: new ObjectId(couponID) }, coupon);
+    public async update(textID: string, text: TextInterface): Promise<any> {
+        return this.db.update(this.collection, { _id: new ObjectId(textID) }, text);
     }
 
-    public async get(couponID: string): Promise<TextInterface | null> {
-        return this.db.findOne(this.collection, { _id: new ObjectId(couponID) });
+    public async get(textID: string): Promise<TextInterface | null> {
+        return this.db.findOne(this.collection, { _id: new ObjectId(textID) });
     }
 
     public async count(predicate: object): Promise<number> {
