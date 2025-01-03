@@ -1,5 +1,5 @@
 import { DBInterface } from "./db";
-import { MongoClient, Db, Sort, Document } from "mongodb";
+import { MongoClient, Db, Sort, Document, DeleteResult, UpdateResult } from "mongodb";
 
 
 export class MongoDB implements DBInterface {
@@ -11,10 +11,10 @@ export class MongoDB implements DBInterface {
         this.db = mongoClient.db(dbName);
     }
 
-    public async findOne(collectionName: string, predicate: Record<string, any>): Promise<any> {
+    public async findOne<T extends Document>(collectionName: string, predicate: Record<string, any>): Promise<T | null> {
         const row = await this.db.collection(collectionName).findOne(predicate);
         if (row) {
-            return { ...row, id: row._id };
+            return { ...row, id: row._id } as unknown as T & { id: typeof row._id };
         }
         return null;
     }
@@ -27,11 +27,11 @@ export class MongoDB implements DBInterface {
         return { ...model, id: result.insertedId };
     }
 
-    public async update(collectionName: string, predicate: object, toUpdate: object): Promise<any> {
+    public async update(collectionName: string, predicate: object, toUpdate: object): Promise<UpdateResult<Document>> {
         return this.db.collection(collectionName).updateOne(predicate, { $set: toUpdate });
     }
 
-    public async delete(collectionName: string, predicate: object, ): Promise<any> {
+    public async delete(collectionName: string, predicate: object, ): Promise<DeleteResult> {
         return this.db.collection(collectionName).deleteOne(predicate);
     }
 
