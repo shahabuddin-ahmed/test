@@ -1,10 +1,11 @@
 import { TextInterface } from "../model/text";
 import { DBInterface } from "../infra/db";
-import { ObjectId } from "mongodb";
+import { DeleteResult, ObjectId, UpdateResult } from "mongodb";
 
 export interface TextRepoInterface {
     create(text: TextInterface): Promise<TextInterface>;
-    update(textID: string, text: TextInterface): Promise<any>;
+    update(textID: string, text: TextInterface): Promise<UpdateResult<Document>>;
+    delete(textID: string): Promise<DeleteResult>;
     get(textID: string): Promise<TextInterface | null>;
     count(predicate: object): Promise<number>;
 }
@@ -19,8 +20,12 @@ export class TextRepo implements TextRepoInterface {
         return this.db.create(this.collection, text);
     }
 
-    public async update(textID: string, text: TextInterface): Promise<any> {
+    public async update(textID: string, text: TextInterface): Promise<UpdateResult<Document>> {
         return this.db.update(this.collection, { _id: new ObjectId(textID) }, text);
+    }
+
+    public async delete(textID: string): Promise<any> {
+        return this.db.delete(this.collection, { _id: new ObjectId(textID) });
     }
 
     public async get(textID: string): Promise<TextInterface | null> {
