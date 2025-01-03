@@ -1,0 +1,37 @@
+{
+    "name": "text-analyzer-api",
+    "version": "1.0.0",
+    "description": "Text Analyzer API",
+    "main": "app.ts",
+    "scripts": {
+        "dev": "nodemon",
+        "build": "tsc",
+        "start": "node -r ts-node/register -r tsconfig-paths/register ./dist/server.js",
+        "prod": "yarn build && yarn start",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Shahabuddin Ahmed",
+    "license": "MIT",
+    "dependencies": {
+        "body-parser": "^1.20.3",
+        "express": "^4.21.2",
+        "joi": "^17.13.3",
+        "mongodb": "^6.12.0",
+        "morgan": "^1.10.0"
+    },
+    "devDependencies": {
+        "@types/body-parser": "^1.19.5",
+        "@types/express": "^4.17.21",
+        "@types/joi": "^17.2.3",
+        "@types/mongodb": "^4.0.7",
+        "@types/morgan": "^1.9.9",
+        "@types/node": "^22.5.5",
+        "@typescript-eslint/eslint-plugin": "^8.6.0",
+        "@typescript-eslint/parser": "^8.6.0",
+        "eslint": "^9.11.0",
+        "nodemon": "^3.1.7",
+        "ts-node": "^10.9.2",
+        "tsconfig-paths": "^4.2.0",
+        "typescript": "^5.6.2"
+    }
+}
