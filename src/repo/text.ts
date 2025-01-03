@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb";
 export interface TextRepoInterface {
     create(text: TextInterface): Promise<TextInterface>;
     update(textID: string, text: TextInterface): Promise<any>;
+    delete(textID: string): Promise<any>;
     get(textID: string): Promise<TextInterface | null>;
     count(predicate: object): Promise<number>;
 }
@@ -21,6 +22,10 @@ export class TextRepo implements TextRepoInterface {
 
     public async update(textID: string, text: TextInterface): Promise<any> {
         return this.db.update(this.collection, { _id: new ObjectId(textID) }, text);
+    }
+
+    public async delete(textID: string): Promise<any> {
+        return this.db.delete(this.collection, { _id: new ObjectId(textID) });
     }
 
     public async get(textID: string): Promise<TextInterface | null> {

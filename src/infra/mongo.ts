@@ -19,18 +19,6 @@ export class MongoDB implements DBInterface {
         return null;
     }
 
-    public async find(collectionName: string, predicate: Record<string, any>,
-        options: { skip?: number; limit?: number; sort?: Sort } = {}, selectOptions: Record<string, unknown> = {}): Promise<any> {
-   
-        const rows: any = [];
-        const cursor = this.db.collection(collectionName).find(predicate, options).project(selectOptions);
-        await cursor.forEach((document) => {
-            rows.push({ ...document, id: document._id });
-        });
-
-        return rows;
-    }
-
     public async create<T extends Document>(collectionName: string, model: T): Promise<T> {
         const result = await this.db.collection(collectionName).insertOne(model);
         if (!result.acknowledged) {
@@ -43,24 +31,12 @@ export class MongoDB implements DBInterface {
         return this.db.collection(collectionName).updateOne(predicate, { $set: toUpdate });
     }
 
-	public async updateMany(collectionName: string, predicate: object, toUpdate: object): Promise<any> {
-        return this.db.collection(collectionName).updateMany(predicate, { $set: toUpdate });
-    }
-
-    public async deleteMany(collectionName: string, predicate: object, ): Promise<any> {
-        return this.db.collection(collectionName).deleteMany(predicate);
-    }
-
     public async delete(collectionName: string, predicate: object, ): Promise<any> {
         return this.db.collection(collectionName).deleteOne(predicate);
     }
 
     public async count(collectionName: string, predicate: Record<string, any>, ): Promise<number> {
         return this.db.collection(collectionName).countDocuments(predicate);
-    }
-
-    public async insertMany(collectionName: string, models: any[], options: object): Promise<any> {
-        return this.db.collection(collectionName).insertMany(models, options);
     }
 }
 

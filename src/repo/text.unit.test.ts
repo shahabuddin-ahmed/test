@@ -9,11 +9,7 @@ const mockDB: DBInterface = {
     update: jest.fn(),
     findOne: jest.fn(),
     count: jest.fn(),
-    insertMany: jest.fn(),
-    updateMany: jest.fn(),
-    deleteMany: jest.fn(),
     delete: jest.fn(),
-    find: jest.fn(),
 };
 
 describe("TextRepo Unit Tests", () => {
@@ -47,6 +43,24 @@ describe("TextRepo Unit Tests", () => {
             updatedText
         );
         expect(result).toEqual(updatedText);
+    });
+
+    it("should delete a text by ID", async () => {
+        (mockDB.delete as jest.Mock).mockResolvedValue({ acknowledged: true, deletedCount: 1 });
+
+        const result = await textRepo.delete(mockTextID);
+
+        expect(mockDB.delete).toHaveBeenCalledWith(collection, { _id: new ObjectId(mockTextID) });
+        expect(result).toEqual({ acknowledged: true, deletedCount: 1 });
+    });
+
+    it("should handle delete with no matching document", async () => {
+        (mockDB.delete as jest.Mock).mockResolvedValue({ acknowledged: true, deletedCount: 0 });
+
+        const result = await textRepo.delete(mockTextID);
+
+        expect(mockDB.delete).toHaveBeenCalledWith(collection, { _id: new ObjectId(mockTextID) });
+        expect(result).toEqual({ acknowledged: true, deletedCount: 0 });
     });
 
     it("should get a text by ID", async () => {
