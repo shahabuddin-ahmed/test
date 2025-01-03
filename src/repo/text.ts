@@ -1,11 +1,12 @@
 import { TextInterface } from "../model/text";
 import { DBInterface } from "../infra/db";
-import { ObjectId } from "mongodb";
+import { DeleteResult, ObjectId, UpdateResult } from "mongodb";
 
 export interface TextRepoInterface {
     create(text: TextInterface): Promise<TextInterface>;
-    update(couponID: string, coupon: TextInterface): Promise<any>;
-    get(couponID: string): Promise<TextInterface | null>;
+    update(textID: string, text: TextInterface): Promise<UpdateResult<Document>>;
+    delete(textID: string): Promise<DeleteResult>;
+    get(textID: string): Promise<TextInterface | null>;
     count(predicate: object): Promise<number>;
 }
 
@@ -19,12 +20,16 @@ export class TextRepo implements TextRepoInterface {
         return this.db.create(this.collection, text);
     }
 
-    public async update(couponID: string, coupon: TextInterface): Promise<any> {
-        return this.db.update(this.collection, { _id: new ObjectId(couponID) }, coupon);
+    public async update(textID: string, text: TextInterface): Promise<UpdateResult<Document>> {
+        return this.db.update(this.collection, { _id: new ObjectId(textID) }, text);
     }
 
-    public async get(couponID: string): Promise<TextInterface | null> {
-        return this.db.findOne(this.collection, { _id: new ObjectId(couponID) });
+    public async delete(textID: string): Promise<any> {
+        return this.db.delete(this.collection, { _id: new ObjectId(textID) });
+    }
+
+    public async get(textID: string): Promise<TextInterface | null> {
+        return this.db.findOne(this.collection, { _id: new ObjectId(textID) });
     }
 
     public async count(predicate: object): Promise<number> {
