@@ -1,19 +1,18 @@
-export interface TextInterface {
+export interface AnalyzerInterface {
     id?: string;
     content: string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
-
 }
 
-export class TextModel implements TextInterface {
+export class AnalyzerModel implements AnalyzerInterface {
     id?: string;
     content: string;
     createdAt: Date | string;
     updatedAt: Date | string;
 
-    constructor(text: TextInterface) {
-        const { id, content, createdAt, updatedAt } = text;
+    constructor(analyzer: AnalyzerInterface) {
+        const { id, content, createdAt, updatedAt } = analyzer;
         this.id = id;
         this.content = content;
         this.createdAt = createdAt ?? new Date();
@@ -21,6 +20,6 @@ export class TextModel implements TextInterface {
     }
 }
 
-export const newTextModel = async (text: TextInterface) => {
-    return new TextModel(text);
+export const newAnalyzerModel = async (analyzer: AnalyzerInterface) => {
+    return new AnalyzerModel(analyzer);
 };
