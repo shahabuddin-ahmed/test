@@ -10,9 +10,11 @@ const gracefulShutdown = (server: http.Server, forcedTimeout: number) => {
         server.close(async () => {
             logger.info("Closed out remaining connections.");
         });
-        
+
         setTimeout(() => {
-            logger.error("Could not close connections in time, forcefully shutting down");
+            logger.error(
+                "Could not close connections in time, forcefully shutting down"
+            );
             process.exit();
         }, forcedTimeout);
     };
@@ -20,10 +22,17 @@ const gracefulShutdown = (server: http.Server, forcedTimeout: number) => {
 
 const server = http.createServer(app);
 
-process.on("SIGTERM", gracefulShutdown(server, config.APP_FORCE_SHUTDOWN_SECOND));
-process.on("SIGINT", gracefulShutdown(server, config.APP_FORCE_SHUTDOWN_SECOND));
-
+process.on(
+    "SIGTERM",
+    gracefulShutdown(server, config.APP_FORCE_SHUTDOWN_SECOND)
+);
+process.on(
+    "SIGINT",
+    gracefulShutdown(server, config.APP_FORCE_SHUTDOWN_SECOND)
+);
 
 server.listen(config.APPLICATION_SERVER_PORT, () => {
-    logger.log("Text Analizer API IS RUNNING: " + config.APPLICATION_SERVER_PORT);
+    logger.log(
+        "Analyzer Analizer API IS RUNNING: " + config.APPLICATION_SERVER_PORT
+    );
 });
