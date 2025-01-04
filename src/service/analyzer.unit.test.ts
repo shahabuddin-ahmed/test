@@ -13,6 +13,7 @@ describe("AnalyzerService Unit Tests", () => {
 
     const mockAnalyzer: AnalyzerInterface = {
         content: "The quick brown fox jumps over the lazy dog.",
+        createdBy: 1,
     };
     const mockAnalyzerID = "60adf93310b25c3878d7be52";
 
@@ -66,6 +67,7 @@ describe("AnalyzerService Unit Tests", () => {
     it("should return paragraph count", async () => {
         const multiParagraphAnalyzer: AnalyzerInterface = {
             content: "Paragraph one.\nParagraph two.\n\nParagraph three.",
+            createdBy: 1,
         };
         mockAnalyzerRepo.get.mockResolvedValue(multiParagraphAnalyzer);
 

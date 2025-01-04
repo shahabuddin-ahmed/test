@@ -14,21 +14,23 @@ export class MongoDB implements DBInterface {
     public async findOne<T extends Document>(collectionName: string, predicate: Record<string, any>): Promise<T | null> {
         const row = await this.db.collection(collectionName).findOne(predicate);
         if (row) {
-            return { ...row, id: row._id } as unknown as T & { id: typeof row._id };
+            const { _id: id, ...rest } = row;
+            return { id, ...rest} as unknown as T & { id: typeof row._id };
         }
         return null;
     }
 
     public async create<T extends Document>(collectionName: string, model: T): Promise<T> {
-        const result = await this.db.collection(collectionName).insertOne(model);
+        const createdAt = new Date(), updatedAt = new Date()
+        const result = await this.db.collection(collectionName).insertOne({ ...model, createdAt, updatedAt });
         if (!result.acknowledged) {
             throw new Error("Failed to insert");
         }
-        return { ...model, id: result.insertedId };
+        return { id: result.insertedId, ...model, createdAt, updatedAt };
     }
 
     public async update(collectionName: string, predicate: object, toUpdate: object): Promise<UpdateResult<Document>> {
-        return this.db.collection(collectionName).updateOne(predicate, { $set: toUpdate });
+        return this.db.collection(collectionName).updateOne(predicate, { $set: { ...toUpdate, updatedAt: new Date() } });
     }
 
     public async delete(collectionName: string, predicate: object, ): Promise<DeleteResult> {

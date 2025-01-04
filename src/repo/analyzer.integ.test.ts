@@ -46,6 +46,7 @@ describe("AnalyzerRepo Integ analyzer repo get", () => {
     it("It should return a analyzer", async () => {
         const analyzerCreated = await analyzerRepo.create({
             content: "this is analyzer content",
+            createdBy: 1,
         });
 
         const analyzer = await analyzerRepo.get(analyzerCreated.id as string);
@@ -60,6 +61,7 @@ describe("AnalyzerRepo Integ analyzer repo create", () => {
     it("It should create analyzer", async () => {
         const analyzer = await analyzerRepo.create({
             content: "xx",
+            createdBy: 1,
         });
         expect(analyzer.id).toBeTruthy();
         expect(analyzer.id).not.toBe(null);
@@ -70,10 +72,12 @@ describe("AnalyzerRepo Integ analyzer repo update", () => {
     it("It should update analyzer", async () => {
         const analyzer = await analyzerRepo.create({
             content: "xx",
+            createdBy: 1,
         });
 
         await analyzerRepo.update(analyzer.id as string, {
             content: "yy",
+            createdBy: 1,
         });
 
         const updatedAnalyzer = await analyzerRepo.get(analyzer.id as string);
@@ -87,6 +91,7 @@ describe("AnalyzerRepo Integ analyzer repo delete", () => {
     it("It should delete analyzer", async () => {
         const analyzer = await analyzerRepo.create({
             content: "xx",
+            createdBy: 1,
         });
 
         const deletedAnalyzer = await analyzerRepo.delete(
@@ -105,6 +110,7 @@ describe("AnalyzerRepo Integ analyzer repo count", () => {
         let counter = 0;
         await analyzerRepo.create({
             content: "xx",
+            createdBy: 1,
         });
 
         counter = await analyzerRepo.count({});
@@ -112,6 +118,7 @@ describe("AnalyzerRepo Integ analyzer repo count", () => {
 
         await analyzerRepo.create({
             content: "yy",
+            createdBy: 1,
         });
 
         counter = await analyzerRepo.count({});

@@ -54,6 +54,7 @@ describe("AnalyzerController Integration Tests", () => {
     it("should create a text analysis entry", async () => {
         const response = await request(app).post("/analyze/create").send({
             content: "The quick brown fox jumps over the lazy dog.",
+            createdBy: 1,
         });
 
         expect(response.status).toBe(200);
@@ -64,6 +65,7 @@ describe("AnalyzerController Integration Tests", () => {
     it("should return word count for a given text", async () => {
         const createResponse = await request(app).post("/analyze/create").send({
             content: "The quick brown fox jumps over the lazy dog.",
+            createdBy: 1,
         });
 
         const analyzerId = createResponse.body.response.id;
@@ -77,6 +79,7 @@ describe("AnalyzerController Integration Tests", () => {
     it("should return character count for a given text", async () => {
         const createResponse = await request(app).post("/analyze/create").send({
             content: "The quick brown fox jumps over the lazy dog.",
+            createdBy: 1,
         });
 
         const analyzerId = createResponse.body.response.id;
@@ -90,6 +93,7 @@ describe("AnalyzerController Integration Tests", () => {
     it("should return sentence count for a given text", async () => {
         const createResponse = await request(app).post("/analyze/create").send({
             content: "The quick brown fox jumps. The lazy dog sleeps.",
+            createdBy: 1,
         });
 
         const analyzerId = createResponse.body.response.id;
@@ -103,6 +107,7 @@ describe("AnalyzerController Integration Tests", () => {
     it("should return paragraph count for a given text", async () => {
         const createResponse = await request(app).post("/analyze/create").send({
             content: "Paragraph one.\nParagraph two.\n\nParagraph three.",
+            createdBy: 1,
         });
 
         const analyzerId = createResponse.body.response.id;
@@ -116,6 +121,7 @@ describe("AnalyzerController Integration Tests", () => {
     it("should return the longest word in the text", async () => {
         const createResponse = await request(app).post("/analyze/create").send({
             content: "The quick brown fox jumps over the lazy dog.",
+            createdBy: 1,
         });
 
         const analyzerId = createResponse.body.response.id;
