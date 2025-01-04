@@ -7,7 +7,12 @@ export const newTextRouter = async (
 ): Promise<Router> => {
     const router = Router();
 
-    router.post("/signup", asyncHandler(textController.create));
+    router.post("/create", asyncHandler(textController.create));
+    router.get("/words-count", asyncHandler(textController.getWordsCount));
+    router.get("/characters-count", asyncHandler(textController.getCharactersCount));
+    router.get("/sentences-count", asyncHandler(textController.getSentencesCount));
+    router.get("/paragraphs-count", asyncHandler(textController.getParagraphsCount));
+    router.get("/longest-word", asyncHandler(textController.getLongestWord));
 
     return router;
 };

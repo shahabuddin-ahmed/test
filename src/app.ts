@@ -7,6 +7,7 @@ import { newTextRepo } from "./repo/text";
 import { newTextService } from "./service/text";
 import { newTextV1Controller } from "./web/controller/v1/text";
 import { initializeDBConnection } from "./infra/mongo";
+import { globalErrorHandler } from "./web/middleware/global-error-handler";
 
 const app = express();
 
@@ -34,6 +35,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
     app.use(morgan("short"));
     app.use("/api/v1", v1Router);
+    app.use(globalErrorHandler);
+
 })();
 
 export default app;
