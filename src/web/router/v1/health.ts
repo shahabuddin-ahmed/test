@@ -8,7 +8,7 @@ export const newHealthRouter = async (): Promise<Router> => {
             code: "SUCCESS",
             message: "Welcome to Text Analyzer API",
             response: null,
-            errors: []
+            errors: [],
         });
     });
 
