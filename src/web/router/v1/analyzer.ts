@@ -1,3 +1,4 @@
+import { authorizedUser } from './../../middleware/authorized-user';
 import { AnalyzerControllerInterface } from "./../../controller/v1/analyzer";
 import { Router } from "express";
 import { asyncHandler } from "../../middleware/async-hander";
@@ -7,22 +8,22 @@ export const newAnalyzerRouter = async (
 ): Promise<Router> => {
     const router = Router();
 
-    router.post("/create", asyncHandler(analyzerController.create));
-    router.get("/words-count", asyncHandler(analyzerController.getWordsCount));
+    router.post("/create", authorizedUser, asyncHandler(analyzerController.create));
+    router.get("/words-count",  authorizedUser, asyncHandler(analyzerController.getWordsCount));
     router.get(
-        "/characters-count",
+        "/characters-count", authorizedUser,
         asyncHandler(analyzerController.getCharactersCount)
     );
     router.get(
-        "/sentences-count",
+        "/sentences-count", authorizedUser,
         asyncHandler(analyzerController.getSentencesCount)
     );
     router.get(
-        "/paragraphs-count",
+        "/paragraphs-count", authorizedUser,
         asyncHandler(analyzerController.getParagraphsCount)
     );
     router.get(
-        "/longest-word",
+        "/longest-word", authorizedUser,
         asyncHandler(analyzerController.getLongestWord)
     );
 
