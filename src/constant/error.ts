@@ -6,6 +6,7 @@ export enum ERROR_CODES {
     E_VALIDATION_FAILED = "E_VALIDATION_FAILED",
     E_INTERNAL_SERVER_ERROR = "E_INTERNAL_SERVER_ERROR",
     BAD_REQUEST = "BAD_REQUEST",
+    TOO_MANY_REQUEST = "TOO_MANY_REQUEST",
 }
 
 export const errorMessages: Record<ERROR_CODES, { message: string }> = {
@@ -29,6 +30,9 @@ export const errorMessages: Record<ERROR_CODES, { message: string }> = {
     },
     BAD_REQUEST: {
         message: "Bad Request"
+    },
+    TOO_MANY_REQUEST: {
+        message: "You have exceeded the allowed number of requests. Please try again later"
     },
 };
 
