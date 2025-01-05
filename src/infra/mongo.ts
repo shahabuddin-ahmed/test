@@ -15,7 +15,7 @@ export class MongoDB implements DBInterface {
         const row = await this.db.collection(collectionName).findOne(predicate);
         if (row) {
             const { _id: id, ...rest } = row;
-            return { id, ...rest} as unknown as T & { id: typeof row._id };
+            return { id, ...rest} as unknown as T;
         }
         return null;
     }
@@ -26,7 +26,7 @@ export class MongoDB implements DBInterface {
         if (!result.acknowledged) {
             throw new Error("Failed to insert");
         }
-        return { id: result.insertedId, ...model, createdAt, updatedAt };
+        return { id: String(result.insertedId), ...model, createdAt, updatedAt };
     }
 
     public async update(collectionName: string, predicate: object, toUpdate: object): Promise<UpdateResult<Document>> {

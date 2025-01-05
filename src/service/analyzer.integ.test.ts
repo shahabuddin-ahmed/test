@@ -41,7 +41,7 @@ afterAll(async () => {
     } catch (err) {}
 });
 
-describe("AnalyzerService Integration Tests", () => {
+describe("AnalyzerService Integration Tests with Caching", () => {
     it("should create a new analyzer and retrieve word count", async () => {
         const analyzer: AnalyzerInterface = {
             content: "The quick brown fox jumps over the lazy dog.",
@@ -62,6 +62,35 @@ describe("AnalyzerService Integration Tests", () => {
             createdAnalyzer.id as string
         );
         expect(wordCount).toBe(9);
+    });
+
+    it("should use cache to retrieve an analyzer", async () => {
+        const analyzer: AnalyzerInterface = {
+            content: "Caching test content.",
+            createdBy: 1,
+            wordsCount: 3,
+            charactersCount: 21,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "Caching",
+        };
+
+        const createdAnalyzer = await analyzerService.create(analyzer);
+
+        const fetchedAnalyzer1 = await analyzerService.getWordsCount(
+            createdAnalyzer.id as string
+        );
+        expect(fetchedAnalyzer1).toBe(3);
+
+        await analyzerRepo.update(createdAnalyzer.id as string, {
+            ...analyzer,
+            wordsCount: 5,
+        });
+
+        const fetchedAnalyzer2 = await analyzerService.getWordsCount(
+            createdAnalyzer.id as string
+        );
+        expect(fetchedAnalyzer2).toBe(3);
     });
 
     it("should calculate character count excluding spaces and punctuation", async () => {

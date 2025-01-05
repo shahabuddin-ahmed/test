@@ -1,3 +1,4 @@
+import NodeCache from "node-cache";
 import { AnalyzerRepoInterface } from "../repo/analyzer";
 import { AnalyzerInterface } from "../model/analyzer";
 import { Controller } from "../web/controller/controller";
@@ -13,13 +14,13 @@ export interface AnalyzerServiceInterface {
     getLongestWord(analyzerId: string): Promise<string>;
 }
 
-export class AnalyzerService
-    extends Controller
-    implements AnalyzerServiceInterface
-{
+export class AnalyzerService extends Controller implements AnalyzerServiceInterface {
+    private cache: NodeCache;
+
     constructor(public analyzerRepo: AnalyzerRepoInterface) {
         super();
         this.analyzerRepo = analyzerRepo;
+        this.cache = new NodeCache({ stdTTL: 900, checkperiod: 60 });
     }
 
     public async create(analyzer: AnalyzerInterface): Promise<any> {
@@ -60,6 +61,11 @@ export class AnalyzerService
     }
 
     private async get(analyzerId: string): Promise<AnalyzerInterface> {
+        const cachedAnalyzer = this.cache.get<AnalyzerInterface>(analyzerId);
+        if (cachedAnalyzer) {
+            return cachedAnalyzer;
+        }
+
         const analyzer = await this.analyzerRepo.get(analyzerId);
         if (!analyzer) {
             throw new BadRequestException(
@@ -67,6 +73,8 @@ export class AnalyzerService
                 "Analyzer not found"
             );
         }
+
+        this.cache.set(analyzerId, analyzer);
         return analyzer;
     }
 
