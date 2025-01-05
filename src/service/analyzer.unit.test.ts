@@ -13,7 +13,11 @@ describe("AnalyzerService Unit Tests", () => {
 
     const mockAnalyzer: AnalyzerInterface = {
         content: "The quick brown fox jumps over the lazy dog.",
-        createdBy: 1,
+        wordsCount: 9, // Pre-calculated for testing
+        charactersCount: 35, // Pre-calculated for testing
+        sentencesCount: 1, // Pre-calculated for testing
+        paragraphsCount: 1, // Pre-calculated for testing
+        longestWord: "quick", // Pre-calculated for testing
     };
     const mockAnalyzerID = "60adf93310b25c3878d7be52";
 
@@ -67,7 +71,11 @@ describe("AnalyzerService Unit Tests", () => {
     it("should return paragraph count", async () => {
         const multiParagraphAnalyzer: AnalyzerInterface = {
             content: "Paragraph one.\nParagraph two.\n\nParagraph three.",
-            createdBy: 1,
+            wordsCount: 9,
+            charactersCount: 35,
+            sentencesCount: 3,
+            paragraphsCount: 3,
+            longestWord: "Paragraph", 
         };
         mockAnalyzerRepo.get.mockResolvedValue(multiParagraphAnalyzer);
 

@@ -43,9 +43,14 @@ describe("AnalyzerRepo Integ analyzer repo get", () => {
         expect(analyzer).toBe(null);
     });
 
-    it("It should return a analyzer", async () => {
+    it("It should return an analyzer", async () => {
         const analyzerCreated = await analyzerRepo.create({
             content: "this is analyzer content",
+            wordsCount: 5,
+            charactersCount: 25,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "analyzer",
             createdBy: 1,
         });
 
@@ -58,9 +63,14 @@ describe("AnalyzerRepo Integ analyzer repo get", () => {
 });
 
 describe("AnalyzerRepo Integ analyzer repo create", () => {
-    it("It should create analyzer", async () => {
+    it("It should create an analyzer", async () => {
         const analyzer = await analyzerRepo.create({
             content: "xx",
+            wordsCount: 1,
+            charactersCount: 2,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "xx",
             createdBy: 1,
         });
         expect(analyzer.id).toBeTruthy();
@@ -69,15 +79,25 @@ describe("AnalyzerRepo Integ analyzer repo create", () => {
 });
 
 describe("AnalyzerRepo Integ analyzer repo update", () => {
-    it("It should update analyzer", async () => {
+    it("It should update an analyzer", async () => {
         const analyzer = await analyzerRepo.create({
             content: "xx",
+            wordsCount: 1,
+            charactersCount: 2,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "xx",
             createdBy: 1,
         });
 
         await analyzerRepo.update(analyzer.id as string, {
             content: "yy",
-            createdBy: 1,
+            wordsCount: 1,
+            charactersCount: 2,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "yy",
+            updatedBy: 2,
         });
 
         const updatedAnalyzer = await analyzerRepo.get(analyzer.id as string);
@@ -88,9 +108,14 @@ describe("AnalyzerRepo Integ analyzer repo update", () => {
 });
 
 describe("AnalyzerRepo Integ analyzer repo delete", () => {
-    it("It should delete analyzer", async () => {
+    it("It should delete an analyzer", async () => {
         const analyzer = await analyzerRepo.create({
             content: "xx",
+            wordsCount: 1,
+            charactersCount: 2,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "xx",
             createdBy: 1,
         });
 
@@ -106,10 +131,15 @@ describe("AnalyzerRepo Integ analyzer repo delete", () => {
 });
 
 describe("AnalyzerRepo Integ analyzer repo count", () => {
-    it("It should count analyzer", async () => {
+    it("It should count analyzers", async () => {
         let counter = 0;
         await analyzerRepo.create({
             content: "xx",
+            wordsCount: 1,
+            charactersCount: 2,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "xx",
             createdBy: 1,
         });
 
@@ -118,6 +148,11 @@ describe("AnalyzerRepo Integ analyzer repo count", () => {
 
         await analyzerRepo.create({
             content: "yy",
+            wordsCount: 1,
+            charactersCount: 2,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "yy",
             createdBy: 1,
         });
 

@@ -41,7 +41,7 @@ beforeEach(async () => {
     try {
         await rawDb.dropCollection(collectionName);
     } catch (error) {
-        // Collection might not exist initially; ignore the error
+        console.log(error);
     }
     await rawDb.createCollection(collectionName);
 });
@@ -53,18 +53,26 @@ afterAll(async () => {
 describe("AnalyzerController Integration Tests", () => {
     it("should create a text analysis entry", async () => {
         const response = await request(app).post("/analyze/create").send({
-            content: "The quick brown fox jumps over the lazy dog.",
+            content: "A quick brown fox jumps over the lazy dog.",
             createdBy: 1,
         });
 
         expect(response.status).toBe(200);
-        expect(response.body.response.content).toBe("The quick brown fox jumps over the lazy dog.");
+        expect(response.body.code).toBe("SUCCESS");
+        expect(response.body.response.content).toBe("A quick brown fox jumps over the lazy dog.");
         expect(response.body.response.id).toBeDefined();
+        expect(response.body.response.wordsCount).toBe(9);
+        expect(response.body.response.charactersCount).toBe(33); // 33 characters excluding spaces
+        expect(response.body.response.sentencesCount).toBe(1);
+        expect(response.body.response.paragraphsCount).toBe(1);
+        expect(response.body.response.longestWord).toBe("quick");
+        expect(response.body.response.createdAt).toBeDefined();
+        expect(response.body.response.updatedAt).toBeDefined();
     });
 
     it("should return word count for a given text", async () => {
         const createResponse = await request(app).post("/analyze/create").send({
-            content: "The quick brown fox jumps over the lazy dog.",
+            content: "A quick brown fox jumps over the lazy dog.",
             createdBy: 1,
         });
 
@@ -73,12 +81,13 @@ describe("AnalyzerController Integration Tests", () => {
         const response = await request(app).get("/analyze/words-count").query({ analyzerId });
 
         expect(response.status).toBe(200);
+        expect(response.body.code).toBe("SUCCESS");
         expect(response.body.response.count).toBe(9); // 9 words
     });
 
     it("should return character count for a given text", async () => {
         const createResponse = await request(app).post("/analyze/create").send({
-            content: "The quick brown fox jumps over the lazy dog.",
+            content: "A quick brown fox jumps over the lazy dog.",
             createdBy: 1,
         });
 
@@ -87,12 +96,13 @@ describe("AnalyzerController Integration Tests", () => {
         const response = await request(app).get("/analyze/characters-count").query({ analyzerId });
 
         expect(response.status).toBe(200);
-        expect(response.body.response.count).toBe(35); // 35 characters excluding spaces
+        expect(response.body.code).toBe("SUCCESS");
+        expect(response.body.response.count).toBe(33); // 33 characters excluding spaces
     });
 
     it("should return sentence count for a given text", async () => {
         const createResponse = await request(app).post("/analyze/create").send({
-            content: "The quick brown fox jumps. The lazy dog sleeps.",
+            content: "A quick brown fox jumps. The lazy dog sleeps.",
             createdBy: 1,
         });
 
@@ -101,6 +111,7 @@ describe("AnalyzerController Integration Tests", () => {
         const response = await request(app).get("/analyze/sentences-count").query({ analyzerId });
 
         expect(response.status).toBe(200);
+        expect(response.body.code).toBe("SUCCESS");
         expect(response.body.response.count).toBe(2); // 2 sentences
     });
 
@@ -115,12 +126,13 @@ describe("AnalyzerController Integration Tests", () => {
         const response = await request(app).get("/analyze/paragraphs-count").query({ analyzerId });
 
         expect(response.status).toBe(200);
+        expect(response.body.code).toBe("SUCCESS");
         expect(response.body.response.count).toBe(3); // 3 paragraphs
     });
 
     it("should return the longest word in the text", async () => {
         const createResponse = await request(app).post("/analyze/create").send({
-            content: "The quick brown fox jumps over the lazy dog.",
+            content: "A quick brown fox jumps over the lazy dog.",
             createdBy: 1,
         });
 
@@ -129,6 +141,7 @@ describe("AnalyzerController Integration Tests", () => {
         const response = await request(app).get("/analyze/longest-word").query({ analyzerId });
 
         expect(response.status).toBe(200);
-        expect(response.body.response.word).toBe("quick"); // "quick" is the longest word
+        expect(response.body.code).toBe("SUCCESS");
+        expect(response.body.response.word).toBe("quick");
     });
 });

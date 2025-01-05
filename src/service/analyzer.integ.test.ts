@@ -2,6 +2,7 @@ import { newAnalyzerRepo, AnalyzerRepoInterface } from "../repo/analyzer";
 import { newMongoDB } from "../infra/mongo";
 import { MongoClient, Db } from "mongodb";
 import { newAnalyzerService, AnalyzerService } from "../service/analyzer";
+import { AnalyzerInterface } from "../model/analyzer";
 
 let analyzerService: AnalyzerService;
 let analyzerRepo: AnalyzerRepoInterface;
@@ -42,25 +43,36 @@ afterAll(async () => {
 
 describe("AnalyzerService Integration Tests", () => {
     it("should create a new analyzer and retrieve word count", async () => {
-        const analyzer = {
+        const analyzer: AnalyzerInterface = {
             content: "The quick brown fox jumps over the lazy dog.",
             createdBy: 1,
+            wordsCount: 9, // Pre-calculated values
+            charactersCount: 35,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "quick",
         };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
         expect(createdAnalyzer).toHaveProperty("id");
         expect(createdAnalyzer.content).toBe(analyzer.content);
+        expect(createdAnalyzer.wordsCount).toBe(9);
 
         const wordCount = await analyzerService.getWordsCount(
             createdAnalyzer.id as string
         );
-        expect(wordCount).toBe(9); // 9 words in the analyzer
+        expect(wordCount).toBe(9);
     });
 
     it("should calculate character count excluding spaces and punctuation", async () => {
-        const analyzer = {
+        const analyzer: AnalyzerInterface = {
             content: "The quick brown fox jumps over the lazy dog.",
             createdBy: 1,
+            wordsCount: 9,
+            charactersCount: 35,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "quick",
         };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
@@ -71,9 +83,14 @@ describe("AnalyzerService Integration Tests", () => {
     });
 
     it("should calculate sentence count", async () => {
-        const analyzer = {
+        const analyzer: AnalyzerInterface = {
             content: "Hello world. This is a test. Let's count sentences!",
             createdBy: 1,
+            wordsCount: 7,
+            charactersCount: 43,
+            sentencesCount: 3,
+            paragraphsCount: 1,
+            longestWord: "sentences",
         };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
@@ -84,9 +101,14 @@ describe("AnalyzerService Integration Tests", () => {
     });
 
     it("should calculate paragraph count", async () => {
-        const analyzer = {
+        const analyzer: AnalyzerInterface = {
             content: "Paragraph one.\nParagraph two.\n\nParagraph three.",
             createdBy: 1,
+            wordsCount: 9,
+            charactersCount: 52,
+            sentencesCount: 3,
+            paragraphsCount: 3,
+            longestWord: "Paragraph",
         };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
@@ -97,9 +119,14 @@ describe("AnalyzerService Integration Tests", () => {
     });
 
     it("should find the longest word", async () => {
-        const analyzer = {
+        const analyzer: AnalyzerInterface = {
             content: "A quick brown fox jumps over the lazy dog.",
             createdBy: 1,
+            wordsCount: 9,
+            charactersCount: 35,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "quick",
         };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
@@ -118,9 +145,14 @@ describe("AnalyzerService Integration Tests", () => {
     });
 
     it("should handle analyzer with punctuation and normalize it", async () => {
-        const analyzer = {
+        const analyzer: AnalyzerInterface = {
             content: "Wow! What a great day. Isn't it wonderful?",
             createdBy: 1,
+            wordsCount: 8,
+            charactersCount: 38,
+            sentencesCount: 3,
+            paragraphsCount: 1,
+            longestWord: "wonderful",
         };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
@@ -130,8 +162,16 @@ describe("AnalyzerService Integration Tests", () => {
         expect(wordCount).toBe(8); // 8 words after removing punctuation
     });
 
-    it("should delete a analyzer and ensure it no longer exists", async () => {
-        const analyzer = { content: "This analyzer will be deleted.", createdBy: 1 };
+    it("should delete an analyzer and ensure it no longer exists", async () => {
+        const analyzer: AnalyzerInterface = {
+            content: "This analyzer will be deleted.",
+            createdBy: 1,
+            wordsCount: 5,
+            charactersCount: 30,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "deleted",
+        };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
         const deleteResult = await analyzerRepo.delete(
@@ -144,14 +184,33 @@ describe("AnalyzerService Integration Tests", () => {
         ).rejects.toThrow("Analyzer not found");
     });
 
-    it("should update a analyzer and reflect changes in analysis", async () => {
-        const analyzer = { content: "Old content.", createdBy: 1 };
+    it("should update an analyzer and reflect changes in analysis", async () => {
+        const analyzer: AnalyzerInterface = {
+            content: "Old content.",
+            createdBy: 1,
+            wordsCount: 2,
+            charactersCount: 12,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "content",
+        };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
-        await analyzerRepo.update(createdAnalyzer.id as string, {
+        const updatedAnalyzer: AnalyzerInterface = {
             content: "Updated analyzer with new content.",
             createdBy: 1,
-        });
+            wordsCount: 5,
+            charactersCount: 35,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "updated",
+        };
+
+        await analyzerRepo.update(createdAnalyzer.id as string, updatedAnalyzer);
+
+        const updated = await analyzerRepo.get(createdAnalyzer.id as string);
+
+        expect(updated?.wordsCount).toBe(5); // 5 words in the updated analyzer
 
         const wordCount = await analyzerService.getWordsCount(
             createdAnalyzer.id as string
