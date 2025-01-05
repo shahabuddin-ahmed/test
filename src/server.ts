@@ -33,6 +33,6 @@ process.on(
 
 server.listen(config.APPLICATION_SERVER_PORT, () => {
     logger.log(
-        "Analyzer Analizer API IS RUNNING: " + config.APPLICATION_SERVER_PORT
+        "Text Analizer API IS RUNNING: " + config.APPLICATION_SERVER_PORT
     );
 });
