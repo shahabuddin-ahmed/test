@@ -7,7 +7,6 @@ interface Config {
     MONGO: MongConfig;
     APPLICATION_SERVER_PORT: number;
     APP_FORCE_SHUTDOWN_SECOND: number;
-    API_KEY: string;
 }
 
 const config: Config = {
@@ -17,7 +16,6 @@ const config: Config = {
     },
     APPLICATION_SERVER_PORT: Number(process.env.APPLICATION_SERVER_PORT) || 3000,
     APP_FORCE_SHUTDOWN_SECOND: Number(process.env.APP_FORCE_SHUTDOWN_SECOND) || 30,
-    API_KEY: process.env.API_KEY || "123456"
 };
 
 export default config;
