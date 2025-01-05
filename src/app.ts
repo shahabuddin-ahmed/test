@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
     );
 
     // Initialize Repo
-    const analyzerRepo = await newAnalyzerRepo(db, "analyzer");
+    const analyzerRepo = await newAnalyzerRepo(db, "text");
 
     // Initialize Service
     const analyzerService = await newAnalyzerService(analyzerRepo);
