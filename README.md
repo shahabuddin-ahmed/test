@@ -6,13 +6,23 @@ Text Analizer API
 ## Installation with Docker
 
 1. Clone from git
-
-2. cd into text-analizer-api
-
-3. run `yarn install` to install all dependencies
-
-## Running the app
-
 ```bash
-$ dokcer-compose up
+git clone https://github.com/shahabuddin-ahmed/text-analizer-api.git
 ```
+
+2. Navigate into the project directory
+```bash
+cd text-analizer-api
+```
+
+3. Install all dependencies
+```bash
+yarn install
+```
+
+4. Run the application using Docker Compose
+```bash
+dokcer-compose up
+```
+
+5. Open the index.html file in your browser, which is located in the public directory
