@@ -14,7 +14,7 @@ const mockDB: DBInterface = {
 
 describe("AnalyzerRepo Unit Tests", () => {
     let analyzerRepo: AnalyzerRepo;
-    const mockAnalyzer: AnalyzerInterface = { content: "The quick brown fox" };
+    const mockAnalyzer: AnalyzerInterface = { content: "The quick brown fox", createdBy: 1 };
     const mockAnalyzerID = "60adf93310b25c3878d7be52"; // Example ObjectId
     const collection = "analyzers";
 
@@ -32,7 +32,7 @@ describe("AnalyzerRepo Unit Tests", () => {
     });
 
     it("should update an existing analyzer", async () => {
-        const updatedAnalyzer = { content: "The lazy dog" };
+        const updatedAnalyzer = { content: "The lazy dog", createdBy: 1 };
         (mockDB.update as jest.Mock).mockResolvedValue(updatedAnalyzer);
 
         const result = await analyzerRepo.update(

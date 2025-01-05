@@ -31,6 +31,7 @@ export class AnalyzerController
     async create(req: Request, res: Response): Promise<any> {
         const schema = Joi.object().keys({
             content: Joi.string().required(),
+            createdBy: Joi.number().integer().required(),
         });
 
         const { value } = await this.validateRequest(schema, req.body);

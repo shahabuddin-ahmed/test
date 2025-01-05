@@ -31,12 +31,12 @@ describe("AnalyzerController", () => {
     });
 
     it("should create text", async () => {
-        const requestBody = { content: "The quick brown fox jumps." };
+        const requestBody = { content: "The quick brown fox jumps.", createdBy: 1 };
         const mockRes = mockResponse();
         
-        mockAnalyzerService.create.mockResolvedValue({ id: "123", content: "The quick brown fox jumps." });
+        mockAnalyzerService.create.mockResolvedValue({ id: "123", content: "The quick brown fox jumps.", createdBy: 1 });
         await controller.create(mockRequest(requestBody) as unknown as Request, mockRes);
-        expect(mockAnalyzerService.create).toHaveBeenCalledWith({ content: "The quick brown fox jumps." });
+        expect(mockAnalyzerService.create).toHaveBeenCalledWith({ content: "The quick brown fox jumps.", createdBy: 1 });
     });
 
     it("should get words count", async () => {

@@ -44,10 +44,11 @@ describe("AnalyzerService Integration Tests", () => {
     it("should create a new analyzer and retrieve word count", async () => {
         const analyzer = {
             content: "The quick brown fox jumps over the lazy dog.",
+            createdBy: 1,
         };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
-        expect(createdAnalyzer).toHaveProperty("_id");
+        expect(createdAnalyzer).toHaveProperty("id");
         expect(createdAnalyzer.content).toBe(analyzer.content);
 
         const wordCount = await analyzerService.getWordsCount(
@@ -59,6 +60,7 @@ describe("AnalyzerService Integration Tests", () => {
     it("should calculate character count excluding spaces and punctuation", async () => {
         const analyzer = {
             content: "The quick brown fox jumps over the lazy dog.",
+            createdBy: 1,
         };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
@@ -71,6 +73,7 @@ describe("AnalyzerService Integration Tests", () => {
     it("should calculate sentence count", async () => {
         const analyzer = {
             content: "Hello world. This is a test. Let's count sentences!",
+            createdBy: 1,
         };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
@@ -83,6 +86,7 @@ describe("AnalyzerService Integration Tests", () => {
     it("should calculate paragraph count", async () => {
         const analyzer = {
             content: "Paragraph one.\nParagraph two.\n\nParagraph three.",
+            createdBy: 1,
         };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
@@ -95,6 +99,7 @@ describe("AnalyzerService Integration Tests", () => {
     it("should find the longest word", async () => {
         const analyzer = {
             content: "A quick brown fox jumps over the lazy dog.",
+            createdBy: 1,
         };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
@@ -115,6 +120,7 @@ describe("AnalyzerService Integration Tests", () => {
     it("should handle analyzer with punctuation and normalize it", async () => {
         const analyzer = {
             content: "Wow! What a great day. Isn't it wonderful?",
+            createdBy: 1,
         };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
@@ -125,7 +131,7 @@ describe("AnalyzerService Integration Tests", () => {
     });
 
     it("should delete a analyzer and ensure it no longer exists", async () => {
-        const analyzer = { content: "This analyzer will be deleted." };
+        const analyzer = { content: "This analyzer will be deleted.", createdBy: 1 };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
         const deleteResult = await analyzerRepo.delete(
@@ -139,11 +145,12 @@ describe("AnalyzerService Integration Tests", () => {
     });
 
     it("should update a analyzer and reflect changes in analysis", async () => {
-        const analyzer = { content: "Old content." };
+        const analyzer = { content: "Old content.", createdBy: 1 };
         const createdAnalyzer = await analyzerService.create(analyzer);
 
         await analyzerRepo.update(createdAnalyzer.id as string, {
             content: "Updated analyzer with new content.",
+            createdBy: 1,
         });
 
         const wordCount = await analyzerService.getWordsCount(
