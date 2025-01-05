@@ -22,7 +22,7 @@ yarn install
 
 4. Run the application using Docker Compose
 ```bash
-dokcer-compose up
+docker-compose up
 ```
 
 5. Open the index.html file in your browser, which is located in the public directory
