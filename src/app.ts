@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import morgan from "morgan";
+import cors from "cors";
 import config from "./config/config";
 import { newV1Router } from "./web/router/v1/index";
 import { newAnalyzerRepo } from "./repo/analyzer";
@@ -10,6 +11,10 @@ import { initializeDBConnection } from "./infra/mongo";
 import { globalErrorHandler } from "./web/middleware/global-error-handler";
 
 const app = express();
+
+app.use(cors({
+    origin: true,
+}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
