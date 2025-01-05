@@ -14,7 +14,16 @@ const mockDB: DBInterface = {
 
 describe("AnalyzerRepo Unit Tests", () => {
     let analyzerRepo: AnalyzerRepo;
-    const mockAnalyzer: AnalyzerInterface = { content: "The quick brown fox" };
+    const mockAnalyzer: AnalyzerInterface = {
+        content: "The quick brown fox",
+        wordsCount: 4,
+        charactersCount: 19,
+        sentencesCount: 1,
+        paragraphsCount: 1,
+        longestWord: "quick",
+        createdBy: 1,
+        updatedBy: 1,
+    };
     const mockAnalyzerID = "60adf93310b25c3878d7be52"; // Example ObjectId
     const collection = "analyzers";
 
@@ -32,7 +41,15 @@ describe("AnalyzerRepo Unit Tests", () => {
     });
 
     it("should update an existing analyzer", async () => {
-        const updatedAnalyzer = { content: "The lazy dog" };
+        const updatedAnalyzer = {
+            content: "The lazy dog",
+            wordsCount: 3,
+            charactersCount: 12,
+            sentencesCount: 1,
+            paragraphsCount: 1,
+            longestWord: "lazy",
+            updatedBy: 2,
+        };
         (mockDB.update as jest.Mock).mockResolvedValue(updatedAnalyzer);
 
         const result = await analyzerRepo.update(
@@ -48,7 +65,7 @@ describe("AnalyzerRepo Unit Tests", () => {
         expect(result).toEqual(updatedAnalyzer);
     });
 
-    it("should delete a analyzer by ID", async () => {
+    it("should delete an analyzer by ID", async () => {
         (mockDB.delete as jest.Mock).mockResolvedValue({
             acknowledged: true,
             deletedCount: 1,
@@ -76,7 +93,7 @@ describe("AnalyzerRepo Unit Tests", () => {
         expect(result).toEqual({ acknowledged: true, deletedCount: 0 });
     });
 
-    it("should get a analyzer by ID", async () => {
+    it("should get an analyzer by ID", async () => {
         (mockDB.findOne as jest.Mock).mockResolvedValue(mockAnalyzer);
 
         const result = await analyzerRepo.get(mockAnalyzerID);
