@@ -25,4 +25,19 @@ yarn install
 docker-compose up
 ```
 
-5. Open the index.html file in your browser, which is located in the public directory
+5. Run all test
+```bash
+yarn test
+```
+
+6. Run unit test
+```bash
+yarn test-unit
+```
+
+7. Run integ test
+```bash
+yarn test-integ
+```
+
+8. Open the index.html file in your browser, which is located in the public directory
